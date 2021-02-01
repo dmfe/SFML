@@ -1,35 +1,43 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
+#define WIDTH 1280
+#define HEIGH 720
+#define STEP 10.0
+
 int main() {
-    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGH), "SFML works!");
 
     sf::Texture texture;
-    if (!texture.loadFromFile("resources/ladybug.png")) {
+    if (!texture.loadFromFile("resources/ladybug_small.png")) {
         // error...
         std::cerr << "Unable to load textures." << std::endl;
         return 1;
     }
 
+    uint texture_width = texture.getSize().x;
+    uint texture_height = texture.getSize().y;
+
     sf::Sprite sprite;
     sprite.setTexture(texture);
 
-    //sf::CircleShape shape(50.0f);
-    //shape.setFillColor(sf::Color::Red);
-
     while (window.isOpen()) {
         sf::Event event;
+
+        float x = sprite.getPosition().x;
+        float y = sprite.getPosition().y;
+
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-                sprite.move(-10, 0);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-                sprite.move(10, 0);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-                sprite.move(0, -10);
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-                sprite.move(0, 10);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && x > STEP)
+                sprite.move(-STEP, 0);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && (x + texture_width) < (WIDTH - STEP))
+                sprite.move(STEP, 0);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && y > STEP)
+                sprite.move(0, -STEP);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && (y + texture_height) < (HEIGH - STEP))
+                sprite.move(0, STEP);
         }
 
         window.clear();
