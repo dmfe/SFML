@@ -13,6 +13,7 @@ class Game : private sf::NonCopyable {
         void update(sf::Time deltaTime);
         void render();
 
+        void updateStatistics(sf::Time elapsedTime);
         void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
 
     private:
@@ -22,7 +23,11 @@ class Game : private sf::NonCopyable {
         sf::RenderWindow window;
         sf::Texture texture;
         sf::Sprite player;
+        sf::Font font;
+        sf::Text statisticsText;
+        sf::Time statisticsUpdateTime;
 
+        std::size_t statisticsNumFrames;
         bool isMovingUp;
         bool isMovingDown;
         bool isMovingRight;

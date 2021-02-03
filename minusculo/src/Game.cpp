@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "StringHelpers.hpp"
 
 #define WIDTH 1280
 #define HEIGH 720
@@ -10,17 +11,26 @@ Game::Game()
 : window(sf::VideoMode(WIDTH, HEIGH), "Minusculo")
 , texture()
 , player()
+, font()
+, statisticsText()
+, statisticsUpdateTime()
+, statisticsNumFrames(0)
 , isMovingUp(false)
 , isMovingDown(false)
 , isMovingLeft(false)
 , isMovingRight(false) {
 
-    if (!texture.loadFromFile("resources/fly.png")) {
+    if (!texture.loadFromFile("resources/bee.png")) {
         // Handle texture loading error...
     }
 
     player.setTexture(texture);
     player.setPosition(WIDTH / 2, HEIGH / 2);
+
+    font.loadFromFile("resources/LinBiolinum_R.otf");
+    statisticsText.setFont(font);
+    statisticsText.setPosition(5.f, 5.f);
+    statisticsText.setCharacterSize(15);
 }
 
 void Game::run() {
@@ -29,13 +39,16 @@ void Game::run() {
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
     while (window.isOpen()) {
 
-        processEvents();
-        timeSinceLastUpdate += clock.restart();
+        sf::Time elapsedTime = clock.restart();
+        timeSinceLastUpdate += elapsedTime;
         while (timeSinceLastUpdate > TimePerFrame) {
             timeSinceLastUpdate -= TimePerFrame;
+
             processEvents();
             update(TimePerFrame);
         }
+
+        updateStatistics(elapsedTime);
         render();
     }
 }
@@ -79,17 +92,37 @@ void Game::render() {
 
     window.clear();
     window.draw(player);
+    window.draw(statisticsText);
     window.display();
+}
+
+void Game::updateStatistics(sf::Time elapsedTime) {
+
+    statisticsUpdateTime += elapsedTime;
+    statisticsNumFrames++;
+
+    if (statisticsUpdateTime >= sf::seconds(1.0f)) {
+        statisticsText.setString(
+                "Frames/Second = " + toString(statisticsNumFrames) + "\n" +
+                "Time/Update = " + toString(statisticsUpdateTime.asMicroseconds() / statisticsNumFrames) + "us");
+
+        statisticsUpdateTime -= sf::seconds(1.0f);
+        statisticsNumFrames = 0;
+    }
 }
 
 void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed) {
 
-    if (key == sf::Keyboard::W)
+    if (key == sf::Keyboard::R)
+        player.setPosition(WIDTH / 2, HEIGH /2);
+
+    if (key == sf::Keyboard::W || key == sf::Keyboard::Up)
         isMovingUp = isPressed;
-    else if (key == sf::Keyboard::S)
+    else if (key == sf::Keyboard::S || key == sf::Keyboard::Down)
         isMovingDown = isPressed;
-    else if (key == sf::Keyboard::A)
+    else if (key == sf::Keyboard::A || key == sf::Keyboard::Left)
         isMovingLeft = isPressed;
-    else if (key == sf::Keyboard::D)
+    else if (key == sf::Keyboard::D || key == sf::Keyboard::Right)
         isMovingRight = isPressed;
 }
+
