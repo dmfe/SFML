@@ -9,7 +9,7 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 
 Game::Game()
 : window(sf::VideoMode(WIDTH, HEIGH), "Minusculo")
-, texture()
+, textures()
 , player()
 , font()
 , statisticsText()
@@ -20,11 +20,9 @@ Game::Game()
 , isMovingLeft(false)
 , isMovingRight(false) {
 
-    if (!texture.loadFromFile("resources/bee.png")) {
-        // Handle texture loading error...
-    }
+    textures.load(Textures::Ladybug, "resources/fly.png");
 
-    player.setTexture(texture);
+    player.setTexture(textures.get(Textures::Ladybug));
     player.setPosition(WIDTH / 2, HEIGH / 2);
 
     font.loadFromFile("resources/LinBiolinum_R.otf");

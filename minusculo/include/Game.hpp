@@ -2,6 +2,7 @@
 #define __GAME_HPP__
 
 #include <SFML/Graphics.hpp>
+#include "ResourceHolder.hpp"
 
 class Game : private sf::NonCopyable {
     public:
@@ -21,7 +22,7 @@ class Game : private sf::NonCopyable {
         static const sf::Time TimePerFrame;
 
         sf::RenderWindow window;
-        sf::Texture texture;
+        TextureHolder textures;
         sf::Sprite player;
         sf::Font font;
         sf::Text statisticsText;
