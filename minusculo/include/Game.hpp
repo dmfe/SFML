@@ -4,6 +4,9 @@
 #include <SFML/Graphics.hpp>
 #include "ResourceHolder.hpp"
 
+#define WIDTH 1280
+#define HEIGH 720
+
 class Game : private sf::NonCopyable {
     public:
         Game();
@@ -21,10 +24,12 @@ class Game : private sf::NonCopyable {
         static const float PlayerSpeed;
         static const sf::Time TimePerFrame;
 
+        ResourceHolder<sf::Texture, Textures::ID> textures;
+        ResourceHolder<sf::Font, Fonts::ID> fonts;
+
         sf::RenderWindow window;
-        TextureHolder textures;
         sf::Sprite player;
-        sf::Font font;
+        sf::Sprite landscape;
         sf::Text statisticsText;
         sf::Time statisticsUpdateTime;
 

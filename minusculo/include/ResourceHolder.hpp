@@ -4,22 +4,37 @@
 #include <map>
 #include <string>
 #include <memory>
+#include <stdexcept>
+#include <cassert>
 #include <SFML/Graphics.hpp>
 
 namespace Textures {
-    enum ID { Landscape, Ladybug, Fly, Bee };
+    enum ID { GrassLS, Ladybug, Fly, Bee };
 }
 
-class TextureHolder {
+namespace Fonts {
+    enum ID { LinBio };
+}
+
+template <typename Resource, typename Identifier>
+class ResourceHolder {
 
     public:
-        void load(Textures::ID id, const std::string& filename);
+        void load(Identifier id, const std::string& filename);
 
-        sf::Texture& get(Textures::ID id);
-        const sf::Texture& get(Textures::ID id) const;
+        template <typename Parameter>
+        void load(Identifier id, const std::string& filename,
+                const Parameter& secondParam);
+
+        Resource& get(Identifier id);
+        const Resource& get(Identifier id) const;
 
     private:
-        std::map<Textures::ID, std::unique_ptr<sf::Texture>> textureMap;
+        std::map<Identifier, std::unique_ptr<Resource>> resourceMap;
+
+    private:
+        void insertResource(Identifier id, std::unique_ptr<Resource> resource);
 };
 
+#include "ResourceHolder.inl"
 #endif

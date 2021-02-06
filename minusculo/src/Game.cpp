@@ -1,17 +1,15 @@
 #include "Game.hpp"
 #include "StringHelpers.hpp"
 
-#define WIDTH 1280
-#define HEIGH 720
-
 const float Game::PlayerSpeed = 100.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 
 Game::Game()
 : window(sf::VideoMode(WIDTH, HEIGH), "Minusculo")
 , textures()
+, fonts()
 , player()
-, font()
+, landscape()
 , statisticsText()
 , statisticsUpdateTime()
 , statisticsNumFrames(0)
@@ -20,13 +18,18 @@ Game::Game()
 , isMovingLeft(false)
 , isMovingRight(false) {
 
-    textures.load(Textures::Ladybug, "resources/fly.png");
+    // Loading resources.
+    textures.load(Textures::Ladybug, "resources/ladybug.png");
+    textures.load(Textures::GrassLS, "resources/grass_landscape.png");
+    fonts.load(Fonts::LinBio, "resources/LinBiolinum_R.otf");
+
+    landscape.setTexture(textures.get(Textures::GrassLS));
+    landscape.setPosition(0, 0);
 
     player.setTexture(textures.get(Textures::Ladybug));
     player.setPosition(WIDTH / 2, HEIGH / 2);
 
-    font.loadFromFile("resources/LinBiolinum_R.otf");
-    statisticsText.setFont(font);
+    statisticsText.setFont(fonts.get(Fonts::LinBio));
     statisticsText.setPosition(5.f, 5.f);
     statisticsText.setCharacterSize(15);
 }
@@ -89,6 +92,7 @@ void Game::update(sf::Time deltaTime) {
 void Game::render() {
 
     window.clear();
+    window.draw(landscape);
     window.draw(player);
     window.draw(statisticsText);
     window.display();
