@@ -15,6 +15,9 @@ class Insect : public Entity {
 
   public:
     explicit Insect(Type type, const TextureHolder &textures);
+    explicit Insect(Type type, const TextureHolder &textures, bool isPlayer);
+    sf::FloatRect getSpriteBounds();
+    unsigned int getCategory() const;
 
   private:
     virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -22,6 +25,7 @@ class Insect : public Entity {
   private:
     Type type;
     sf::Sprite sprite;
+    bool isPlayer;
 };
 
 #endif

@@ -16,5 +16,6 @@ target_include_directories(minusculo PUBLIC
 target_link_libraries(minusculo PRIVATE
   sfml-graphics sfml-window sfml-system sfml-audio sfml-network
 )
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources DESTINATION "${CMAKE_BINARY_DIR}")
 
 

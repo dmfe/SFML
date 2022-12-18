@@ -7,38 +7,37 @@
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-#include "ResourceHolder.hpp"
 #include "ResourceIndentifiers.hpp"
 #include "World.hpp"
+#include "Player.hpp"
 
 #define WIDTH 1280
 #define HEIGH 720
 
 class Game : private sf::NonCopyable {
 
-  public:
-    Game();
-    void run();
+    public:
+        Game();
+        void run();
 
-  private:
-    void processEvents();
-    void update(sf::Time deltaTime);
-    void render();
+    private:
+        void processInput();
+        void update(sf::Time deltaTime);
+        void render();
+        void updateStatistics(sf::Time elapsedTime);
 
-    void updateStatistics(sf::Time elapsedTime);
-    void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
+    private:
+        static const sf::Time TimePerFrame;
 
-  private:
-    static const sf::Time TimePerFrame;
+        FontHolder fonts;
 
-    FontHolder fonts;
+        sf::RenderWindow window;
+        World world;
+        Player player;
 
-    sf::RenderWindow window;
-    World world;
-
-    sf::Text statisticsText;
-    sf::Time statisticsUpdateTime;
-    std::size_t statisticsNumFrames;
+        sf::Text statisticsText;
+        sf::Time statisticsUpdateTime;
+        std::size_t statisticsNumFrames;
 };
 
 #endif
